@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 0;
+            padding: 20px;
+        }
+        .activity-container {
+            width: 50%;
+            position: relative;
+        }
+        .activity-box {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 50px;
+            margin: 10px 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .activity-box img {
+            height: 100%;
+            width: auto;
+            max-width: 80px;
+            object-fit: cover;
+        }
+        .activity-content {
+            flex: 1;
+            padding: 0 15px;
+        }
+        .activity-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .activity-desc {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="activity-container" id="activityContainer"></div>
+    
+    <script>
+        const activities = [
+            { img: "https://via.placeholder.com/80", title: "活动1", desc: "活动1描述", link: "#" },
+            { img: "https://via.placeholder.com/80", title: "活动2", desc: "活动2描述", link: "#" },
+            { img: "https://via.placeholder.com/80", title: "活动3", desc: "活动3描述", link: "#" },
+            { img: "https://via.placeholder.com/80", title: "活动4", desc: "活动4描述", link: "#" },
+            { img: "https://via.placeholder.com/80", title: "活动5", desc: "活动5描述", link: "#" }
+        ];
+        
+        const container = document.getElementById("activityContainer");
+        const maxVisible = Math.floor(window.innerHeight / 70); 
+        let loaded = 0;
+
+        function loadActivities(count) {
+            for (let i = 0; i < count && loaded < activities.length; i++) {
+                const { img, title, desc, link } = activities[loaded];
+                const box = document.createElement("div");
+                box.classList.add("activity-box");
+                box.innerHTML = `
+                    <img src="${img}" alt="${title}">
+                    <div class="activity-content">
+                        <div class="activity-title">${title}</div>
+                        <div class="activity-desc">${desc}</div>
+                    </div>
+                `;
+                box.onclick = () => window.location.href = link;
+                container.appendChild(box);
+                setTimeout(() => {
+                    box.style.opacity = "1";
+                    box.style.transform = "translateY(0)";
+                }, 100 * loaded);
+                loaded++;
+            }
+        }
+
+        loadActivities(maxVisible);
+
+        window.addEventListener("scroll", () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+                loadActivities(1);
+            }
+        });
+    </script>
+</body>
+</html>
